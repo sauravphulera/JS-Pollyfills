@@ -400,6 +400,103 @@ class PromiseSimple {
 }
 ```
 
+## Promise.all 
+
+```
+// Polyfill for Promise.all
+function promiseAll(promises) {
+  return new Promise((resolve, reject) => {
+    let results = [];
+    let completedPromises = 0;
+
+    // Check if the input is empty and resolve with an empty array
+    if (promises.length === 0) {
+      resolve([]);
+    }
+
+    promises.forEach((promise, index) => {
+      // Convert the value to a promise using Promise.resolve
+      Promise.resolve(promise)
+        .then((value) => {
+          // Store the resolved value in results array
+          results[index] = value;
+          completedPromises++;
+
+          // If all promises have resolved, resolve the main promise with results array
+          if (completedPromises === promises.length) {
+            resolve(results);
+          }
+        })
+        .catch((error) => {
+          // If any promise rejects, reject the main promise with the error
+          reject(error);
+        });
+    });
+  });
+}
+```
+
+## Promise.all with concurrency
+```
+function promiseAllWithConcurrency(promises, concurrency) {
+  return new Promise((resolve, reject) => {
+    let results = [];
+    let runningCount = 0; // Number of currently running promises
+    let currentIndex = 0;  // The index of the next promise to run
+    let completedPromises = 0;
+
+    // Start the next promise in the queue
+    const runNext = () => {
+      if (completedPromises === promises.length) {
+        return resolve(results);
+      }
+
+      // If no more promises are left to run, stop the process
+      if (currentIndex >= promises.length) {
+        return;
+      }
+
+      const index = currentIndex; // Capture the current promise's index
+      const promise = promises[currentIndex]; // Get the next promise
+      currentIndex++; // Move the index to the next promise
+
+      runningCount++;
+
+      // Convert to a promise to handle non-promise values
+      Promise.resolve(promise)
+        .then((value) => {
+          results[index] = value;
+          completedPromises++;
+          runningCount--;
+
+          // When a promise finishes, start the next one
+          if (completedPromises === promises.length) {
+            resolve(results); // Resolve when all promises are done
+          } else {
+            runNext(); // Start a new promise
+          }
+        })
+        .catch((error) => {
+          reject(error); // Reject as soon as one promise fails
+        });
+
+      // Ensure that we maintain the concurrency limit
+      if (runningCount < concurrency) {
+        runNext();
+      }
+    };
+
+    // Start the initial promises (up to the concurrency limit)
+    for (let i = 0; i < Math.min(concurrency, promises.length); i++) {
+      runNext();
+    }
+  });
+}
+```
+### Explanation:
+1. Concurrency control: The function runs at most concurrency number of promises simultaneously. Once a promise finishes (either resolves or rejects), the next promise from the queue starts.
+2. Run-next mechanism: After a promise completes, runNext is called to continue running the next pending promise in the list.
+3. Edge case: If the input array is empty, the function immediately resolves with an empty array.
 
 
 
