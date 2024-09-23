@@ -275,6 +275,38 @@ function debounce(callback, timer) {
 const debouncedSearchInput = debounce(handleSearchInput, 300);
 ```
 
+## Debounce with leading and trailing option
+```javascript
+function debounce(func, wait, option = {leading: false, trailing: true}) {
+  // your code here
+  let timeout, cooling = false, lastFun = true;
+
+  return function (...args) { 
+    if(timeout) {
+      clearTimeout(timeout);
+    }
+    if(option.leading && !cooling) {
+      func.apply(this, args);
+
+      // to make sure same func is not called again if trailing is also true
+      lastFun = false;
+      cooling = true;
+      
+    } else {
+      lastFun = true;
+    }
+
+    timeout = setTimeout(() => {
+      if(option.trailing &&  lastFun) {
+        func.apply(this, args);
+      }
+      cooling = false;
+    }, wait)
+
+  }
+}
+```
+
 
 
 ## Throttle
