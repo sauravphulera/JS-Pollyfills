@@ -4,7 +4,7 @@
 
 ## 1. Map
 
-```
+```javascript
 Array.prototype.myMap = function(callback) {
     let result = [];
     for (let i = 0; i < this.length; i++) {
@@ -22,7 +22,7 @@ console.log(doubled); // Output: [2, 4, 6]
 
 ## 2.Filter
 
-```
+```javascript
 Array.prototype.myFilter = function(callback) {
     let result = [];
     for (let i = 0; i < this.length; i++) {
@@ -36,7 +36,7 @@ Array.prototype.myFilter = function(callback) {
 
 ## 3. Reduce
 
-```
+```javascript
 Array.prototype.myReduce = function(callback, initialValue) {
     let accumulator = initialValue === undefined ? this[0] : initialValue;
     let startIndex = initialValue === undefined ? 1 : 0;
@@ -53,7 +53,7 @@ Array.prototype.myReduce = function(callback, initialValue) {
 ## 4. For Each
 
 
-```
+```javascript
 Array.prototype.myForEach = function(callback) {
     for (let i = 0; i < this.length; i++) {
         callback(this[i], i, this);
@@ -74,7 +74,7 @@ numbers.myForEach(num => console.log(num));
 ## 5. Call, Apply and Bind
 Call
 
-```
+```javascript
 Function.prototype.myCall = function (context,...args) {
 		if(typeof this !== 'function') {
     	  throw new TypeError('myCall must be called on a function');
@@ -91,7 +91,7 @@ Function.prototype.myCall = function (context,...args) {
 
 
 ## b.Apply
-```
+```javascript
 Function.prototype.myApply = function (context, args) {
     if (typeof this !== 'function') {
         throw new TypeError('myApply must be called on a function');
@@ -112,7 +112,7 @@ Function.prototype.myApply = function (context, args) {
 
 
 ## C. Bind
-```		
+```javascript		
 Function.prototype.myBind = function (context, ...bindArgs) {
     if (typeof this !== 'function') {
         throw new TypeError('myBind must be called on a function');
@@ -136,7 +136,7 @@ console.log(greetJohn('.')); // Hey, John.
 
 
 ## Async.series and Async.parallel
-```
+```javascript
 const asyncUtils = {
     // Execute tasks in parallel
     parallel: function(tasks, finalCallback) {
@@ -239,7 +239,7 @@ asyncUtils.series([task1, task2, task3], (err, results) => {
 
 ## Deep Clone an Object
 
-```
+```javascript
 function deepClone(obj) {
     if (obj === null || typeof obj !== 'object') {
         return obj;
@@ -261,7 +261,7 @@ function deepClone(obj) {
 
 
 ## Debounce
-```
+```javascript
 function debounce(callback, timer) {
 	let timeout;
   
@@ -310,7 +310,7 @@ function debounce(func, wait, option = {leading: false, trailing: true}) {
 
 
 ## Throttle
-```
+```javascript
 function throttle(func, wait) {
  // your code here
  let timeout, shouldCallFn = true, lastArgs = null;
@@ -353,7 +353,7 @@ function throttle(func, wait) {
 
 
 ## Throttle With Leading and Trailing options
-```
+```javascript
 function throttle(func, wait, option = {leading: true, trailing: true}) {
 // your code here
 let timeout, shouldCallFn = true, lastArgs = null;
@@ -394,7 +394,7 @@ return function throttled(...args) {
 
 ## Promise Object Implementation
 
-```
+```javascript
 class PromiseSimple {
 		constructor(executionFunction) {
      		  this.handleError = () => {};
@@ -434,7 +434,7 @@ class PromiseSimple {
 
 ## Promise.all 
 
-```
+```javascript
 // Polyfill for Promise.all
 function promiseAll(promises) {
   return new Promise((resolve, reject) => {
@@ -469,7 +469,7 @@ function promiseAll(promises) {
 ```
 
 ## Promise.all with concurrency
-```
+```javascript
 function promiseAllWithConcurrency(promises, concurrency) {
   return new Promise((resolve, reject) => {
     let results = [];
@@ -533,7 +533,7 @@ function promiseAllWithConcurrency(promises, concurrency) {
 
 
 ## Publisher Subscriber
-```
+```javascript
 class PubSub {
   constructor() {
     this.subscribers = {};
